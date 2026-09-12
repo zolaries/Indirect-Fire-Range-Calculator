@@ -193,10 +193,17 @@
             const dx = x2 - x1;
             const dy = y2 - y1;
 
+            // Range: raw distance, scaled x100 and rounded to a whole number
+            // (e.g. raw 6.01 -> 601, matching the game's meter scale)
             const range = Math.sqrt(dx * dx + dy * dy);
-            document.getElementById("result").textContent = range.toFixed(2);
+            document.getElementById("result").textContent = Math.round(range * 100);
 
-            let bearing = Math.atan2(dx, dy) * (180 / Math.PI);
+            // Bearing: 0° = North, 90° = East, clockwise
+            // NOTE: using -dy here because most in-game maps have Y increasing
+            // DOWNWARD (screen-style), opposite of standard "north-up" math.
+            // If bearings still look wrong, try swapping the line below for:
+            // let bearing = Math.atan2(dx, dy) * (180 / Math.PI);
+            let bearing = Math.atan2(dx, -dy) * (180 / Math.PI);
             if (bearing < 0) bearing += 360;
             document.getElementById("bearing").textContent = bearing.toFixed(1) + "°";
         }
