@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wardogs Range Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #12140f;
+            color: #c7d2b0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .panel {
+            background-color: #1a1d15;
+            border: 1px solid #3a4030;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(122, 143, 74, 0.03);
+            border-radius: 4px;
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        h1 {
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #9fbf6a;
+            border-bottom: 1px solid #3a4030;
+            padding-bottom: 12px;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #7a8f4a;
+            margin-bottom: 8px;
+            margin-top: 24px;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .field {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            font-size: 0.7rem;
+            color: #6b7a52;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            background-color: #0e100a;
+            border: 1px solid #3a4030;
+            color: #d8e3bd;
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 2px;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #9fbf6a;
+            box-shadow: 0 0 6px rgba(159, 191, 106, 0.4);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 28px;
+            padding: 12px;
+            background-color: #3a4a24;
+            border: 1px solid #6b8244;
+            color: #e4edcf;
+            font-family: inherit;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        button:hover {
+            background-color: #4a5e2c;
+            box-shadow: 0 0 10px rgba(159, 191, 106, 0.3);
+        }
+
+        button:active {
+            background-color: #2e3a1c;
+        }
+
+        .readout {
+            margin-top: 24px;
+            border-top: 1px solid #3a4030;
+            padding-top: 16px;
+        }
+
+        .readout-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .readout-label {
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #7a8f4a;
+        }
+
+        .readout-value {
+            font-size: 1.4rem;
+            color: #d3e39a;
+            text-shadow: 0 0 8px rgba(159, 191, 106, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="panel">
+        <h1>Wardogs Range Calculator</h1>
+
+        <h2>Your Position</h2>
+        <div class="row">
+            <div class="field">
+                <label>X</label>
+                <input type="number" id="yourX" step="any">
+            </div>
+            <div class="field">
+                <label>Y</label>
+                <input type="number" id="yourY" step="any">
+            </div>
+        </div>
+
+        <h2>Target Position</h2>
+        <div class="row">
+            <div class="field">
+                <label>X</label>
+                <input type="number" id="targetX" step="any">
+            </div>
+            <div class="field">
+                <label>Y</label>
+                <input type="number" id="targetY" step="any">
+            </div>
+        </div>
+
+        <button onclick="calculateRange()">Calculate Range</button>
+
+        <div class="readout">
+            <div class="readout-row">
+                <span class="readout-label">Range</span>
+                <span class="readout-value" id="result">---</span>
+            </div>
+            <div class="readout-row">
+                <span class="readout-label">Bearing</span>
+                <span class="readout-value" id="bearing">---</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateRange() {
+            const x1 = parseFloat(document.getElementById("yourX").value);
+            const y1 = parseFloat(document.getElementById("yourY").value);
+            const x2 = parseFloat(document.getElementById("targetX").value);
+            const y2 = parseFloat(document.getElementById("targetY").value);
+
+            if (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) {
+                document.getElementById("result").textContent = "---";
+                document.getElementById("bearing").textContent = "Fill all fields";
+                return;
+            }
+
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+
+            const range = Math.sqrt(dx * dx + dy * dy);
+            document.getElementById("result").textContent = range.toFixed(2);
+
+            let bearing = Math.atan2(dx, dy) * (180 / Math.PI);
+            if (bearing < 0) bearing += 360;
+            document.getElementById("bearing").textContent = bearing.toFixed(1) + "°";
+        }
+    </script>
+
+</body>
+</html>
