@@ -144,6 +144,19 @@
             color: #9a9464;
             text-align: center;
         }
+
+        .notice-heading {
+            display: block;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #b0aa76;
+            margin-bottom: 6px;
+        }
+
+        .notice + .notice {
+            margin-top: 12px;
+        }
     </style>
 </head>
 
@@ -183,14 +196,16 @@
                 <span class="readout-label">Range</span>
                 <span class="readout-value" id="result">---</span>
             </div>
-            <div class="readout-row">
-                <span class="readout-label">Bearing</span>
-                <span class="readout-value" id="bearing">---</span>
-            </div>
         </div>
 
         <div class="notice">
-            ⚠ This tool is under active development. Double-check calculations before relying on them in-game.
+            <span class="notice-heading">⚠ Disclaimer</span>
+            This tool is under active development. Double-check calculations before relying on them in-game.
+        </div>
+
+        <div class="notice">
+            <span class="notice-heading">Reminder</span>
+            Make sure you enter the correct positive or negative sign for each coordinate. A wrong sign will give you an incorrect range.
         </div>
     </div>
 
@@ -203,7 +218,6 @@
 
             if (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2)) {
                 document.getElementById("result").textContent = "---";
-                document.getElementById("bearing").textContent = "Fill all fields";
                 return;
             }
 
@@ -214,15 +228,6 @@
             // (e.g. raw 6.01 -> 601, matching the game's meter scale)
             const range = Math.sqrt(dx * dx + dy * dy);
             document.getElementById("result").textContent = Math.round(range * 100);
-
-            // Bearing: 0° = North, 90° = East, clockwise
-            // NOTE: using -dy here because most in-game maps have Y increasing
-            // DOWNWARD (screen-style), opposite of standard "north-up" math.
-            // If bearings still look wrong, try swapping the line below for:
-            // let bearing = Math.atan2(dx, dy) * (180 / Math.PI);
-            let bearing = Math.atan2(dx, -dy) * (180 / Math.PI);
-            if (bearing < 0) bearing += 360;
-            document.getElementById("bearing").textContent = bearing.toFixed(1) + "°";
         }
     </script>
 
